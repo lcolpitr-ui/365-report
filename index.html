@@ -1,0 +1,692 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="365能歌善舞 · 同修全息查阅中心">
+    <!-- Open Graph / 微信分享 -->
+    <meta property="og:title" content="365能歌善舞 · 同修全息查阅中心">
+    <meta property="og:description" content="365能歌善舞 · 同修全息查阅中心">
+    <meta property="og:image" content="images/image_2.jpg">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="365能歌善舞">
+    <!-- 微信专用 -->
+    <meta itemprop="name" content="365能歌善舞 · 同修全息查阅中心">
+    <meta itemprop="image" content="images/image_2.jpg">
+    <title>365能歌善舞 · 同修全息查阅中心</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --paper: #F4EFE6;
+            --surface: #FCFAF7;
+            --ink: #2D2A24;
+            --ink-medium: #5A5348;
+            --ink-light: #9B9185;
+            --cinnabar: #C1433A;
+            --cinnabar-bg: rgba(193, 67, 58, 0.06);
+            --border: #E8E0D6;
+            --border-light: #F0EAE0;
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; overflow: hidden; margin: 0; }
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #FDFCF0; }
+        .serif-title { font-family: 'Noto Serif SC', serif; }
+
+        .app { height: 100vh; width: 100%; max-width: 480px; margin: 0 auto; overflow: hidden; display: flex; flex-direction: column; }
+        .app-main { flex: 1; position: relative; overflow: hidden; }
+
+        .content-section {
+            position: absolute; inset: 0;
+            visibility: hidden; opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .content-section.active {
+            visibility: visible; opacity: 1;
+            position: relative;
+            height: 100%;
+        }
+
+        /* ═══════════════════════ 第一页 ═══════════════════════ */
+        .scroll-wrap {
+            height: 100%; width: 100%; min-height: 100%;
+            position: relative; overflow: hidden;
+            background: url(images/image_1.jpg) no-repeat center bottom / cover;
+            background-color: #FDFCF0;
+        }
+        .scroll-wrap::after {
+            content: ''; position: absolute; inset: 0;
+            pointer-events: none; z-index: 0;
+            background: 
+                radial-gradient(ellipse at 12% 20%, rgba(220,210,190,0.10) 0%, transparent 35%),
+                radial-gradient(ellipse at 78% 18%, rgba(225,215,195,0.07) 0%, transparent 30%),
+                radial-gradient(ellipse at 82% 72%, rgba(215,205,185,0.08) 0%, transparent 35%),
+                radial-gradient(ellipse at 25% 80%, rgba(230,220,200,0.06) 0%, transparent 30%),
+                radial-gradient(ellipse at 50% 50%, rgba(240,235,220,0.10) 0%, transparent 40%);
+        }
+        .scroll-overlay {
+            height: 100%; width: 100%;
+            display: flex; flex-direction: column;
+            padding: 6px 12px 28px;
+            background: rgba(253,252,240,0.06);
+            position: relative; z-index: 1;
+        }
+        .layer-header { flex-shrink: 0; text-align: center; }
+        .layer-header .seal-bar {
+            display: inline-flex; align-items: center;
+            background: #2d6a4f; height: 28px;
+            padding: 0 20px; border-radius: 4px;
+        }
+        .layer-header .seal-bar span {
+            font-family: 'Noto Serif SC', serif;
+            color: #fff; font-size: 12px; letter-spacing: 4px;
+        }
+        .layer-header .sub-date {
+            color: #5c4d3c; font-size: 11px; margin-top: 6px;
+            letter-spacing: 2px; opacity: 0.7;
+        }
+        .layer-middle { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding-top: 24px; }
+        .hero-number {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 56px; font-weight: 700; color: #2d6a4f;
+            line-height: 1; text-shadow: 0 2px 8px rgba(45,106,79,0.1);
+        }
+        .hero-sub { color: #5c4d3c; font-size: 13px; margin-top: 2px; letter-spacing: 2px; }
+        .stat-row { display: flex; gap: 6px; width: 100%; margin-top: 10px; }
+        .stat-cell {
+            flex: 1; text-align: center;
+            background: rgba(244,241,222,0.55);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(230,223,195,0.6);
+            border-radius: 8px; padding: 8px 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+        .stat-cell .n { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 700; color: #5c4d3c; }
+        .stat-cell .n.pure { color: #2d6a4f; }
+        .stat-cell .n.vip { color: #b8860b; }
+        .stat-cell .n.rest { color: #8a9ba8; }
+        .stat-cell .l { font-size: 11px; color: #8a7e72; margin-top: 1px; }
+        .level-row { display: flex; gap: 10px; justify-content: center; padding: 4px 0 2px; }
+        .level-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #5c4d3c; }
+        .level-item .bar { width: 50px; height: 5px; background: rgba(230,223,195,0.5); border-radius: 3px; overflow: hidden; }
+        .level-item .bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #aed581, #2d6a4f); }
+        .level-item .lbl { font-size: 9px; color: #8a7e72; }
+        .tier-row { display: flex; gap: 6px; justify-content: center; padding: 2px 0; }
+        .tier-tag { font-size: 11px; padding: 3px 10px; border-radius: 16px; background: rgba(244,241,222,0.4); backdrop-filter: blur(2px); color: #5c4d3c; }
+        .tier-tag .hl { font-weight: 700; }
+        .tier-tag .hl.pink { color: #d84b6a; }
+        .tier-tag .hl.green { color: #2d6a4f; }
+        .tier-tag .hl.teal { color: #00897b; }
+        .layer-poem { flex-shrink: 0; padding: 24px 10px 0; }
+        .layer-poem .text { color: #4a4a4a; font-style: italic; font-family: 'Noto Serif SC', serif; text-align: center; line-height: 1.6; font-size: 13px; opacity: 0.85; }
+        .layer-poem .text .source { display: block; margin-top: 3px; font-size: 9px; color: #8a7e72; opacity: 0.6; font-style: normal; }
+
+        /* ═══════════════════════ 第二页 · 纯文本骨架 ═══════════════════════ */
+        .page-tower {
+            height: 100%; width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F0EFEA;
+        }
+        /* 第二层：奶白主话框 */
+        .frame-middle {
+            width: 92%; height: 96vh;
+            background: #FDFCF0;
+            border-radius: 20px;
+            padding: 16px;
+            display: flex; flex-direction: column;
+            box-shadow: 0 8px 30px rgba(180,170,155,0.12);
+        }
+        /* 第三层：熟宣长轴 */
+        .scroll-card {
+            flex: 1;
+            display: flex; flex-direction: column;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: 
+                /* 宣纸纹理（叠在背景图之上） */
+                radial-gradient(ellipse at 10% 18%, rgba(220,210,190,0.10) 0%, transparent 35%),
+                radial-gradient(ellipse at 75% 10%, rgba(225,215,195,0.07) 0%, transparent 30%),
+                radial-gradient(ellipse at 85% 70%, rgba(215,205,185,0.08) 0%, transparent 35%),
+                radial-gradient(ellipse at 20% 75%, rgba(230,220,200,0.06) 0%, transparent 32%),
+                radial-gradient(ellipse at 50% 50%, rgba(240,235,220,0.10) 0%, transparent 45%),
+                /* 宝塔背景图 */
+                url(images/image_2.jpg) no-repeat center 3% / 100% auto,
+                /* 底部熟宣色 */
+                #F4F1DE;
+        }
+        .scroll-card > * { position: relative; z-index: 1; }
+        /* 顶栏 */
+        .tower-topbar {
+            flex-shrink: 0;
+            background: transparent;
+            height: 28px;
+            display: flex; align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(200,190,175,0.2);
+        }
+        .tower-topbar .tt {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 10px; color: #5a5a5a; letter-spacing: 1px;
+        }
+        .tower-topbar .tt {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 10px; color: #5a5a5a; letter-spacing: 1px;
+        }
+
+        /* 搜索 */
+        .tower-search {
+            flex-shrink: 0;
+            display: flex; align-items: center;
+            justify-content: center; gap: 8px;
+            padding: 20px 20px 4px;
+        }
+        .tower-search .label {
+            font-size: 13px; color: #5c4d3c;
+            font-family: 'Noto Serif SC', serif;
+            letter-spacing: 1px; flex-shrink: 0;
+        }
+        .tower-search .wrap { position: relative; max-width: 180px; flex: 1; }
+        .tower-search input {
+            width: 100%; border: none;
+            border-bottom: 1px solid #e0d8cc;
+            background: transparent; padding: 5px 22px 5px 0;
+            font-size: 13px; outline: none; color: #5c4d3c;
+            font-family: 'Noto Serif SC', serif;
+        }
+        .tower-search input::placeholder { color: #d4c5b0; font-size: 11px; font-family: 'Noto Sans SC', sans-serif; }
+        .tower-search input:focus { border-bottom-color: #b8a99a; }
+        .tower-search .icon {
+            position: absolute; right: 0; top: 50%;
+            transform: translateY(-50%); color: #d4c5b0;
+            pointer-events: none;
+        }
+
+        /* 上部总序 + 能量合流 */
+        .tower-summary {
+            flex-shrink: 0;
+            padding: 6px 20px 4px;
+            display: flex; flex-direction: column;
+            gap: 3px;
+            background: rgba(244,241,222,0.7);
+            backdrop-filter: blur(2px);
+            border-bottom: 1px solid rgba(200,190,175,0.12);
+        }
+        .ts-name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 18px; font-weight: 700; color: #5c4d3c;
+            letter-spacing: 1px;
+        }
+        .ts-sub {
+            font-size: 10px; color: #c4b5a0;
+        }
+        .ts-stats {
+            display: flex; gap: 10px;
+            padding: 4px 0;
+        }
+        .ts-stat { text-align: center; flex: 1; }
+        .ts-stat .n {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 15px; font-weight: 700; color: #5c4d3c;
+        }
+        .ts-stat .l { font-size: 8px; color: #b8a99a; letter-spacing: 0.5px; }
+        .ts-energy {
+            font-size: 11px; color: #5c4d3c;
+            padding: 3px 0;
+            border-top: 1px solid rgba(200,190,175,0.2);
+            border-bottom: 1px solid rgba(200,190,175,0.2);
+        }
+        .ts-energy .hl { color: #2D6A4F; font-weight: 600; }
+        .ts-energy .tag {
+            font-size: 8px; font-weight: 500;
+            color: #5a5a5a;
+        }
+
+        /* 中下部：修行长河 */
+        .tower-river {
+            flex: 1;
+            display: flex; flex-direction: column;
+            padding: 0 24px 0 20px;
+            min-height: 0;
+            position: relative;
+        }
+        /* 灰度遮罩覆盖层 - 确保背景图显示在文字下方 */
+        .tower-river > * { position: relative; z-index: 1; }
+        /* 逐层灰度遮罩 */
+        .r-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            flex: 1;
+            min-height: 0;
+            border-radius: 6px;
+            padding: 1px 8px;
+            position: relative;
+            transition: all 0.6s ease;
+        }
+        .r-row.lit {
+            background: rgba(212,197,176,0.2);
+        }
+        .r-mask {
+            position: absolute !important;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            border-radius: 6px;
+            z-index: 0 !important;
+            pointer-events: none;
+            display: block !important;
+        }
+        .r-row > * { position: relative; z-index: 1; }
+        /* 上半：9行垂直次第 */
+        .river-upper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 0;
+            padding: 4px 0;
+        }
+        .r-line-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 20px;
+            flex-shrink: 0;
+            height: 100%;
+        }
+        .r-dot {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            border: 2.5px solid #e6dfc3;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .r-dot.lit {
+            background: #A63429;
+            border-color: #A63429;
+            box-shadow: 0 0 10px rgba(166,52,41,0.25);
+        }
+        .r-dot.lit::after { content: '✦'; color: #fff; font-size: 9px; }
+        .r-line {
+            width: 2px;
+            flex: 1;
+            min-height: 6px;
+            background: #e0d8cc;
+        }
+        .r-label-area {
+            flex: 1;
+            min-width: 0;
+            padding-bottom: 2px;
+        }
+        .r-label {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #A6A29A;
+            line-height: 1.3;
+            transition: all 0.6s ease;
+        }
+        .r-label.lit { color: #A63429; }
+        .r-sub {
+            font-size: 10px;
+            color: #d4c5b0;
+            transition: all 0.6s ease;
+        }
+        .r-sub.lit { color: rgba(166,52,41,0.45); }
+        .r-quote {
+            font-size: 11px;
+            color: #A63429;
+            font-style: italic;
+            display: block;
+            margin-top: 1px;
+            font-weight: 300;
+        }
+
+        /* 下半：3块横向基石 */
+        .river-lower {
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 2px 2px;
+            border-top: 1px solid rgba(200,190,175,0.2);
+            margin-top: 1px;
+        }
+        .r-base {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            padding: 4px 16px;
+            border-radius: 6px;
+            position: relative;
+        }
+        .r-base > * { position: relative; z-index: 1; }
+        .r-base .bd {
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            border: 2.5px solid #e6dfc3;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.6s ease;
+        }
+        .r-base .bd.lit { background: #A63429; border-color: #A63429; box-shadow: 0 0 8px rgba(166,52,41,0.2); }
+        .r-base .bd.lit::after { content: '✦'; color: #fff; font-size: 8px; }
+        .r-base .bn {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 12px; font-weight: 700;
+            color: #A6A29A;
+            transition: all 0.6s ease;
+        }
+        .r-base .bn.lit { color: #A63429; }
+        .r-base .bs {
+            font-size: 9px;
+            color: #d4c5b0;
+            transition: all 0.6s ease;
+        }
+        .r-base .bs.lit { color: rgba(166,52,41,0.4); }
+
+        .tower-save {
+            flex-shrink: 0;
+            text-align: center;
+            padding: 2px 20px 10px;
+        }
+        .tower-save button {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid rgba(90,90,90,0.25);
+            border-radius: 6px;
+            background: transparent;
+            color: #5a5a5a;
+            font-size: 10px;
+            font-family: 'Noto Serif SC', serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .tower-save button:hover { border-color: rgba(90,90,90,0.5); color: #3a3a3a; background: rgba(244,241,222,0.3); }
+
+        /* ── 导航 ── */
+        .bottom-nav {
+            display: flex; background: transparent;
+            padding: 2px 16px 6px;
+            height: 48px; flex-shrink: 0;
+        }
+        .nav-btn {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; gap: 1px; padding: 4px 0;
+            border: none; background: none; cursor: pointer;
+            transition: color 0.3s; color: #b0bec5; font-family: inherit;
+        }
+        .nav-btn.active { color: #2d6a4f; }
+        .nav-btn span { font-size: 9px; font-weight: 500; letter-spacing: 0.5px; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <main class="app-main">
+
+            <!-- ━━━ 第一页：共修晴雨录 ━━━ -->
+            <section id="page-home" class="content-section active">
+                <div class="scroll-wrap">
+                    <div class="scroll-overlay">
+                        <div class="layer-header">
+                            <div class="seal-bar"><span>◈ 365能歌善舞 · 同修晴雨录 ◈</span></div>
+                            <div class="sub-date">2026年6月15日 · 照见当日资粮</div>
+                        </div>
+                        <div style="flex-shrink:0;margin:12px 0;background:rgba(244,241,222,0.8);border-radius:4px;padding:5px 12px;text-align:center;">
+                            <span style="font-family:'Noto Serif SC',serif;font-size:10px;color:#5c4d3c;letter-spacing:0.5px;">当前共修规则：2026-06（底线:≥1分 ｜ 目标:舞210/诵210 ｜ 预警线:≥3次）</span>
+                        </div>
+                        <div class="layer-middle">
+                            <div class="hero-number">170</div>
+                            <div class="hero-sub">位同修今日在一起精进</div>
+                            <div class="stat-row">
+                                <div class="stat-cell"><div class="n pure">53</div><div class="l">🪷 纯净全勤</div></div>
+                                <div class="stat-cell"><div class="n">22</div><div class="l">✨ 相对全勤</div></div>
+                                <div class="stat-cell"><div class="n vip">135</div><div class="l">💎 通关</div></div>
+                                <div class="stat-cell"><div class="n rest">27</div><div class="l">🎐 今日暂歇</div></div>
+                            </div>
+                            <div class="level-row">
+                                <div class="level-item"><span>✨ 三阶</span><div class="bar"><div class="bar-fill" style="width:82%"></div></div><span class="lbl">139人</span></div>
+                                <div class="level-item"><span>🌸 四阶</span><div class="bar"><div class="bar-fill" style="width:18%"></div></div><span class="lbl">31人</span></div>
+                            </div>
+                            <div class="tier-row">
+                                <span class="tier-tag">🌊 见微隘 <span class="hl teal">64</span>人</span>
+                                <span class="tier-tag">🤝 胶着隘 <span class="hl pink">24</span>人</span>
+                                <span class="tier-tag">🔥 淬炼隘 <span class="hl green">7</span>人</span>
+                            </div>
+                        </div>
+                        <div class="layer-poem">
+                            <div class="text">“今日全员共修气场清净稳定。见证着同修们逐渐放下红尘里的攀比与对立，在动静自律中回归内心的澄明。精进即是日常，甚好。”<span class="source">—— AI 护持伙伴 · 每日留痕</span></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ━━━ 第二页：九层圣塔个人卷轴 ━━━ -->
+            <section id="page-search" class="content-section">
+                <div class="page-tower">
+                    <div class="frame-middle">
+                        <div class="scroll-card">
+                            <!-- 顶部题签带 -->
+                            <div class="tower-topbar">
+                                <span class="tt">◈ 365能歌善舞 · 同修晴雨录 ◈</span>
+                            </div>
+
+                            <!-- 搜索 -->
+                            <div class="tower-search">
+                                <span class="label">寻迹</span>
+                            <div class="wrap">
+                                    <input type="text" id="search-input" placeholder="输入同修昵称..." autocomplete="off">
+                                    <button class="icon" id="search-btn" style="background:none;border:none;cursor:pointer;padding:0;color:inherit;display:flex;align-items:center;">
+                                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- 占位 -->
+                            <div id="tower-body" style="flex:1;display:flex;flex-direction:column;min-height:0;">
+                                <div id="search-idle" style="flex:1;display:flex;flex-direction:column;align-items:center;padding-top:50px;color:#d4c5b0;background:url(images/image_3.jpg) no-repeat center/cover;border-radius:6px;margin:4px;position:relative;">
+                                    <div style="display:flex;flex-direction:column;align-items:center;">
+                                        <img src="images/image_4.gif" style="width:48px;height:48px;display:block;">
+                                        <div style="font-size:11px;letter-spacing:0.5px;margin-top:6px;color:#8a7e72;">输入名字，点亮修行长河</div>
+                                    </div>
+                                </div>
+                                <div id="search-result" class="hidden" style="flex:1;display:flex;flex-direction:column;min-height:0;"></div>
+                            </div>
+
+                            <!-- 底部保存 -->
+                            <div class="tower-save">
+                                <button onclick="exportCard()">💾 保存个人卷轴</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <nav class="bottom-nav">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span>共修晴雨录</span>
+            </span>
+            <button onclick="switchTab('search')" id="nav-search" class="nav-btn">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>寻迹查询</span>
+            </span>
+        </nav>
+    </div>
+
+    <script>
+        const DEMO_DATA = {
+            students: [
+                { name: "觉察同修", class: "3", team: "般若队", monthlyDays: 22, totalDays: 165, effectiveDays: 158, danceMin: 1293, chantMin: 785, todayReached: true, status: "纯净全勤", isVip: false, badges: { pure: true, revive: false, d210: false, star: true }, monthsCleared: [1, 2, 3, 4, 5, 6] },
+                { name: "骨干同修", class: "1", team: "精进队", monthlyDays: 28, totalDays: 180, effectiveDays: 175, danceMin: 1540, chantMin: 920, todayReached: true, status: "双210通关", isVip: true, badges: { pure: true, revive: true, d210: true, star: true }, monthsCleared: [1, 2, 3, 4, 5, 6, 7] },
+                { name: "暂歇同修", class: "2", team: "持戒队", monthlyDays: 8, totalDays: 42, effectiveDays: 35, danceMin: 380, chantMin: 210, todayReached: false, status: "今日关隘破窗", isVip: false, badges: { pure: false, revive: false, d210: false, star: false }, monthsCleared: [1, 2] }
+            ]
+        };
+
+        // 12 个月：9层塔身(月4-12) + 3基座(月1-3)
+        const TOWER_LEVELS = [
+            { id: 'l9',    label: '🏮 大圆满',    date: '2027.05', month: 12, seals: '' },
+            { id: 'l8',    label: '🏮 圆满',      date: '2027.04', month: 11, seals: '' },
+            { id: 'l7',    label: '🏮 现证',      date: '2027.03', month: 10, seals: '' },
+            { id: 'l6',    label: '🏮 相应',      date: '2027.02', month: 9,  seals: '' },
+            { id: 'l5',    label: '🏮 觉行',      date: '2027.01', month: 8,  seals: '' },
+            { id: 'l4',    label: '🏮 净行',      date: '2026.12', month: 7,  seals: '' },
+            { id: 'l3',    label: '🏮 发心',      date: '2026.11', month: 6,  seals: '' },
+            { id: 'l2',    label: '🏮 观缘',      date: '2026.10', month: 5,  seals: '' },
+            { id: 'l1',    label: '🏮 闻思',      date: '2026.09', month: 4,  seals: '💎🌟' },
+        ];
+
+        const BASE_BLOCKS = [
+            { id: 'b1', label: '归真', date: '2026.06', month: 1, seals: '🪷' },
+            { id: 'b2', label: '惜缘', date: '2026.07', month: 2, seals: '' },
+            { id: 'b3', label: '励勤', date: '2026.08', month: 3, seals: '♻️' },
+        ];
+
+        // ─── 陪伴小语 ───
+        const COMPANION_QUOTES = {
+            l9:    '圆满非终点，是起点。',
+            l8:    '圆满资粮，自性具足。',
+            l7:    '现证本来，无一可得。',
+            l6:    '相应一处，万法归宗。',
+            l5:    '觉行淬炼，方见真金。',
+            l4:    '净行如莲，出淤泥而不染。',
+            l3:    '发心一发，天地同宽。',
+            l2:    '观缘起，知性空。',
+            l1:    '闻思为眼，修行是足。',
+            b1:    '归真返璞，人格贤善。',
+            b2:    '惜缘当下，一念万年。',
+            b3:    '励勤不懈，水滴石穿。',
+        };
+
+        // ─── 渲染修行长河（大圆圈 + 竖线串联） ───
+        function renderRiver(clearedMonths) {
+            // 上半：9行垂直
+            const tower = TOWER_LEVELS;
+            const upper = tower.map((l, idx) => {
+                const lited = clearedMonths.includes(l.month);
+                const isLast = idx === tower.length - 1;
+                const quote = lited ? `<span class="r-quote">${COMPANION_QUOTES[l.id] || ''}</span>` : '';
+                const s = l.seals ? `<span style="font-size:10px;opacity:0.5;letter-spacing:2px;margin-left:6px;">${l.seals}</span>` : '';
+                const mask = lited ? '' : '<div class="r-mask"></div>';
+                return `
+                    <div class="r-row ${lited?'lit':''}">
+                        ${mask}
+                        <div class="r-line-col">
+                            <div class="r-dot ${lited?'lit':''}"></div>
+                            ${isLast ? '' : '<div class="r-line"></div>'}
+                        </div>
+                        <div class="r-label-area">
+                            <span class="r-label ${lited?'lit':''}">${l.label}${s}</span>
+                            ${quote}
+                        </div>
+                        <span class="r-sub ${lited?'lit':''}">${l.date}</span>
+                    </div>`;
+            }).join('');
+
+            // 下半：3块基石
+            const lower = BASE_BLOCKS.map(b => {
+                const lited = clearedMonths.includes(b.month);
+                const s = b.seals ? `<span style="font-size:9px;opacity:0.5;letter-spacing:2px;margin-left:3px;">${b.seals}</span>` : '';
+                const mask = lited ? '' : '<div class="r-mask"></div>';
+                return `
+                    <div class="r-base ${lited?'lit':''}">
+                        ${mask}
+                        <div class="bd ${lited?'lit':''}"></div>
+                        <span class="bn ${lited?'lit':''}">${b.label}${s}</span>
+                        <span class="bs ${lited?'lit':''}">${b.date}</span>
+                    </div>`;
+            }).join('');
+
+            return `
+                <div class="river-upper">${upper}</div>
+                <div class="river-lower">${lower}</div>`;
+        }
+
+        // ─── 构建查询结果 ───
+        function buildResult(s) {
+            const alertHtml = !s.todayReached ? `
+                <div style="background:#fef2f2;border:1.5px solid #dc2626;border-radius:6px;padding:5px 10px;margin:2px 10px 4px;text-align:center;">
+                    <div style="font-size:13px;font-weight:700;color:#b91c1c;">🔴 今日未履约</div>
+                    <div style="font-size:10px;color:#d84b6a;margin-top:2px;display:flex;align-items:center;justify-content:center;gap:4px;"><span style="font-size:12px;">⚡</span> 习气拉扯中！</div>
+                    <div style="font-size:9px;color:#991b1b;margin-top:4px;background:rgba(220,38,38,0.06);border-radius:4px;padding:3px 8px;">觉察当下的散逸，一念即归</div>
+                </div>` : '';
+
+            return `
+                ${alertHtml}
+                <div class="tower-summary">
+                    <div style="display:flex;flex-direction:column;align-items:center;">
+                        <span class="ts-name">${s.name}</span>
+                        <span style="font-size:10px;color:#c4b5a0;font-family:'Noto Serif SC',serif;">今日履约</span>
+                    </div>
+                    <div class="ts-stats">
+                        <div class="ts-stat"><div class="n">${s.monthlyDays}<span style="font-size:9px;font-weight:400;color:#b8a99a;">次</span></div><div class="l">当月履约</div></div>
+                        <div class="ts-stat"><div class="n">${s.totalDays}<span style="font-size:9px;font-weight:400;color:#b8a99a;">天</span></div><div class="l">同修缘深</div></div>
+                        <div class="ts-stat"><div class="n">${s.effectiveDays}<span style="font-size:9px;font-weight:400;color:#b8a99a;">天</span></div><div class="l">无漏净计</div></div>
+                    </div>
+                    <div class="ts-energy">
+                        🌟 能量池：舞 ${s.danceMin} · 诵 ${s.chantMin} · 合计 <span class="hl">${s.danceMin + s.chantMin}</span> ｜ <span class="tag">${s.status}</span>
+                    </div>
+                </div>
+                <div class="tower-river">
+                    ${renderRiver(s.monthsCleared)}
+                </div>`;
+        }
+
+        // ─── 切换 ───
+        function switchTab(name) {
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`page-${name}`).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`nav-${name}`).classList.add('active');
+        }
+
+        // ─── 搜索 ───
+        function doSearch() {
+            const input = document.getElementById('search-input').value.trim();
+            if (!input) return;
+            const student = DEMO_DATA.students.find(s => s.name === input);
+            const idle = document.getElementById('search-idle');
+            const result = document.getElementById('search-result');
+            if (student) {
+                result.innerHTML = buildResult(student);
+                result.classList.remove('hidden');
+                idle.classList.add('hidden');
+            } else {
+                // 找不到就恢复空状态（显示 brief_bg.jpg）
+                idle.classList.remove('hidden');
+                result.classList.add('hidden');
+                result.innerHTML = '';
+            }
+        }
+
+        function exportCard() {
+            const el = document.querySelector('#search-result');
+            if (!el || el.classList.contains('hidden')) return;
+            html2canvas(el, { backgroundColor: '#FDFCF0', scale: 2, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '365精进足迹.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        document.getElementById('search-input').addEventListener('keypress', e => { if (e.key === 'Enter') doSearch(); }); document.getElementById('search-btn').addEventListener('click', doSearch);
+        switchTab('home');
+    </script>
+</body>
+</html>
